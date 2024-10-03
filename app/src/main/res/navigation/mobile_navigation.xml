@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_recipes_list">
+
+    <fragment
+        android:id="@+id/nav_recipes_list"
+        android:name="ru.freedominc.sfedu.ui.recipes_list.RecipesListFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_recipes_list" >
+        <action
+            android:id="@+id/action_nav_recipes_list_to_nav_recipe"
+            app:destination="@id/nav_recipe" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_recipe"
+        android:name="ru.freedominc.sfedu.ui.recipe.RecipeFragment"
+        android:label="@string/menu_gallery"
+        tools:layout="@layout/fragment_recipe" >
+        <argument
+            android:name="recipe"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_slideshow"
+        android:name="ru.freedominc.sfedu.ui.slideshow.SlideshowFragment"
+        android:label="@string/menu_slideshow"
+        tools:layout="@layout/fragment_slideshow" />
+</navigation>
