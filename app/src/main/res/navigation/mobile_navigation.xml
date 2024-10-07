@@ -9,11 +9,7 @@
         android:id="@+id/nav_recipes_list"
         android:name="ru.freedominc.sfedu.ui.recipes_list.RecipesListFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_recipes_list" >
-        <action
-            android:id="@+id/action_nav_recipes_list_to_nav_recipe"
-            app:destination="@id/nav_recipe" />
-    </fragment>
+        tools:layout="@layout/fragment_recipes_list" />
 
     <fragment
         android:id="@+id/nav_recipe"

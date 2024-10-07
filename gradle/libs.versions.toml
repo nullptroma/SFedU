@@ -1,7 +1,7 @@
 [versions]
-agp = "8.6.0"
-kotlin = "1.9.0"
-ksp = "2.0.20-1.0.25"
+agp = "8.6.1"
+kotlin = "2.0.20"
+ksp = "2.0.20-1.0.24"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -13,8 +13,13 @@ constraintlayout = "2.1.4"
 lifecycleLivedataKtx = "2.8.5"
 lifecycleViewmodelKtx = "2.8.5"
 nav_version = "2.8.2"
+daggerHilt = "2.49"
 
 [libraries]
+# Hilt
+dagger-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "daggerHilt" }
+dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "daggerHilt" }
+
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -35,3 +40,5 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 navigation-safeargs-kotlin = { id = "androidx.navigation.safeargs.kotlin", version.ref = "nav_version" }
 navigation-safeargs = { id = "androidx.navigation.safeargs", version.ref = "nav_version" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "daggerHilt" }
+

@@ -8,14 +8,23 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.onNavDestinationSelected
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.navigation.NavigationView
+import dagger.hilt.android.AndroidEntryPoint
 import ru.freedominc.sfedu.R
 import ru.freedominc.sfedu.databinding.FragmentRecipesListBinding
+import ru.freedominc.sfedu.navigation.NavigationHelper
 import ru.freedominc.sfedu.ui.recipe.RecipeFragment
 import ru.freedominc.sfedu.ui.recipes_list.recycler_view.RecipesAdapter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class RecipesListFragment : Fragment() {
+    @Inject
+    lateinit var navigationHelper: NavigationHelper
 
     private var _binding: FragmentRecipesListBinding? = null
 
@@ -37,8 +46,7 @@ class RecipesListFragment : Fragment() {
         var dataset = arrayOf("January", "February", "March")
         dataset = dataset+dataset+dataset+dataset
         val customAdapter = RecipesAdapter(dataset) { name ->
-            val action = RecipesListFragmentDirections.actionNavRecipesListToNavRecipe(recipe = name)
-            Navigation.findNavController(binding.root).navigate(action)
+            navigationHelper.onRecipeSelect(name)
         }
 
         val recyclerView: RecyclerView = binding.recyclerViewRecipes

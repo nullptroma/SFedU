@@ -1,6 +1,7 @@
 package ru.freedominc.sfedu
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.google.android.material.snackbar.Snackbar
@@ -13,9 +14,15 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.ui.onNavDestinationSelected
+import dagger.hilt.android.AndroidEntryPoint
 import ru.freedominc.sfedu.databinding.ActivityMainBinding
+import ru.freedominc.sfedu.navigation.NavigationHelper
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+    @Inject
+    lateinit var navHelper : NavigationHelper
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
@@ -28,11 +35,6 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
-//        binding.appBarMain.fab.setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                .setAction("Action", null)
-//                .setAnchorView(R.id.fab).show()
-//        }
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
@@ -45,6 +47,8 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        setupNavHelper()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -56,5 +60,19 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    private fun setupNavHelper() {
+        navHelper.onRecipeSelect = { name ->
+            val newArgs = Bundle()
+            newArgs.putString("recipe", name)
+            navHelper.currentRecipeArgs = newArgs
+
+            val navController = findNavController(R.id.nav_host_fragment_content_main)
+            val navView = binding.navView
+            val menu = navView.menu
+            val second = menu.findItem(R.id.nav_recipe)
+            second.onNavDestinationSelected(navController)
+        }
     }
 }
