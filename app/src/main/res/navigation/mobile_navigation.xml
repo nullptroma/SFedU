@@ -8,13 +8,13 @@
     <fragment
         android:id="@+id/nav_recipes_list"
         android:name="ru.freedominc.sfedu.ui.recipes_list.RecipesListFragment"
-        android:label="@string/menu_home"
+        android:label="@string/menu_list"
         tools:layout="@layout/fragment_recipes_list" />
 
     <fragment
         android:id="@+id/nav_recipe"
         android:name="ru.freedominc.sfedu.ui.recipe.RecipeFragment"
-        android:label="@string/menu_gallery"
+        android:label="@string/menu_recipe"
         tools:layout="@layout/fragment_recipe" >
         <argument
             android:name="recipe"
@@ -24,6 +24,6 @@
     <fragment
         android:id="@+id/nav_slideshow"
         android:name="ru.freedominc.sfedu.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
+        android:label="@string/menu_favorites"
         tools:layout="@layout/fragment_slideshow" />
 </navigation>

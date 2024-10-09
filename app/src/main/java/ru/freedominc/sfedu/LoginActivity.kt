@@ -86,8 +86,7 @@ class LoginActivity : AppCompatActivity() {
                 return true
             }
         }
-        return true
-        // TODO
+
         binding.buttonLogin.setBackgroundColor(Color.RED)
         return false
     }

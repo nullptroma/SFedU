@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="recipes">
+        <item>Okroshka with kefir</item>
+        <item>Olivier salad</item>
+        <item>Borscht with beef</item>
+        <item>Vinaigrette</item>
+        <item>Cabbage soup (Shchi) with fresh cabbage</item>
+        <item>Buckwheat porridge with mushrooms</item>
+        <item>Mashed potatoes with meat patties</item>
+        <item>Dumplings with sour cream</item>
+        <item>Rassolnik with pearl barley</item>
+        <item>Pancakes with cottage cheese</item>
+        <item>Baked chicken thighs</item>
+        <item>Stewed potatoes with meat</item>
+        <item>Chicken pilaf</item>
+        <item>Meat solyanka</item>
+        <item>Cabbage rolls with meat and rice</item>
+        <item>Navy-style pasta</item>
+        <item>Fried fish with potatoes</item>
+        <item>Cottage cheese pancakes with jam</item>
+        <item>Semolina porridge with butter</item>
+        <item>Fermented cabbage</item>
+        <item>Fresh vegetable salad</item>
+        <item>Fish soup with potatoes</item>
+        <item>Millet porridge with milk</item>
+        <item>Omelette with tomatoes</item>
+        <item>Lazy dumplings</item>
+    </string-array>
+</resources>

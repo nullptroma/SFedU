@@ -14,8 +14,8 @@
     <string name="no_recipe">You have to select recipe first!</string>
     <string name="recipe">Your recipe is %1$s!</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_list">Recipes list</string>
+    <string name="menu_recipe">Current recipe</string>
+    <string name="menu_favorites">Favorites</string>
     <string name="login_horizontal">Login (Horizontal)</string>
 </resources>

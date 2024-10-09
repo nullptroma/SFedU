@@ -4,6 +4,10 @@ import android.os.Bundle
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.components.ActivityRetainedComponent
+import dagger.hilt.android.scopes.ActivityRetainedScoped
+import dagger.hilt.android.scopes.ActivityScoped
 import dagger.hilt.android.scopes.FragmentScoped
 import dagger.hilt.components.SingletonComponent
 import ru.freedominc.sfedu.navigation.NavigationHelper
@@ -19,11 +23,11 @@ annotation class RecipeArgs
 annotation class SlideshowArgs
 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(ActivityRetainedComponent::class)
 class NavigationModule {
 
     @Provides
-    @Singleton
+    @ActivityRetainedScoped
     fun provideNavigationHelper() : NavigationHelper{
         return NavigationHelper()
     }
