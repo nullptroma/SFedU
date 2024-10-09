@@ -41,7 +41,7 @@ class RecipesListFragment : Fragment() {
 
         val dataset = resources.getStringArray(R.array.recipes)
         dataset.sort()
-        val customAdapter = RecipesAdapter(dataset, requireContext()) { name ->
+        val customAdapter = RecipesAdapter(dataset, resources.displayMetrics.heightPixels) { name ->
             navigationHelper.onRecipeSelect(name)
         }
         val recyclerView: RecyclerView = binding.recyclerViewRecipes

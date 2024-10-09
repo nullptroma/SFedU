@@ -14,9 +14,8 @@ import kotlin.math.log
 import kotlin.math.max
 
 
-class RecipesAdapter(private val dataSet: Array<String>, context: Context, private val onClick: (String) -> Unit) :
+class RecipesAdapter(private val dataSet: Array<String>, private val screenHeight: Int, private val onClick: (String) -> Unit) :
     RecyclerView.Adapter<RecipesAdapter.ViewHolder>() {
-    private val screenHeight : Int = context.resources.displayMetrics.heightPixels
 
     class ViewHolder(val binding: ItemRecipeBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(text: String, onClick: (String) -> Unit) {
