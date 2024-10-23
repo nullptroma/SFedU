@@ -8,21 +8,37 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.freedominc.sfedu.databinding.ItemRecipeBinding
+import ru.freedominc.sfedu.domain.Recipe
 import kotlin.math.log
 import kotlin.math.max
 
 
-class RecipesAdapter(private val dataSet: Array<String>, private val screenHeight: Int, private val onClick: (String) -> Unit) :
+class RecipesAdapter(private val screenHeight: Int, private val onClick: (Recipe) -> Unit) :
     RecyclerView.Adapter<RecipesAdapter.ViewHolder>() {
+    val list = AsyncListDiffer(this, object : DiffUtil.ItemCallback<Recipe>() {
+        override fun areItemsTheSame(
+            oldItem: Recipe, newItem: Recipe
+        ): Boolean {
+            return oldItem == newItem
+        }
 
-    class ViewHolder(val binding: ItemRecipeBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(text: String, onClick: (String) -> Unit) {
+        override fun areContentsTheSame(
+            oldItem: Recipe, newItem: Recipe
+        ): Boolean {
+            return oldItem == newItem
+        }
+    })
+
+    class ViewHolder(private val binding: ItemRecipeBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(recipe: Recipe, onClick: (Recipe) -> Unit) {
             with(binding) {
-                tvRecipeText.text = text
+                tvRecipeText.text = recipe.name
                 cardRecipeItem.setOnClickListener {
-                    onClick(text)
+                    onClick(recipe)
                 }
             }
         }
@@ -37,10 +53,10 @@ class RecipesAdapter(private val dataSet: Array<String>, private val screenHeigh
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.bind(dataSet[position], onClick)
+        viewHolder.bind(list.currentList[position], onClick)
     }
 
     // Return the size of your dataset (invoked by the layout manager)
-    override fun getItemCount() = dataSet.size
+    override fun getItemCount() = list.currentList.size
 
 }
