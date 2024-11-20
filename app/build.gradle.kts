@@ -51,6 +51,12 @@ dependencies {
     implementation(libs.retrofit.converter.scalars)
     implementation(libs.google.gson)
 
+    // Room
+    implementation(libs.room.ktx)
+    implementation(libs.room.runtime)
+    annotationProcessor(libs.room.compiler)
+    ksp(libs.room.compiler)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

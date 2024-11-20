@@ -1,15 +1,17 @@
-package ru.freedominc.sfedu.data.remote.repositories
+package ru.freedominc.sfedu.data
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import ru.freedominc.sfedu.data.local.dao.RecipeDao
+import ru.freedominc.sfedu.data.local.model.DbRecipe
 import ru.freedominc.sfedu.data.remote.api.RecipesApi
 import ru.freedominc.sfedu.di.IoDispatcher
 import ru.freedominc.sfedu.domain.Recipe
@@ -17,16 +19,19 @@ import ru.freedominc.sfedu.domain.RecipesPackage
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
 @Singleton
 class RecipesRepository @Inject constructor(
     private val api: RecipesApi,
+    private val dao: RecipeDao,
     @IoDispatcher ioDispatcher: CoroutineDispatcher
 ) {
     val flowData: StateFlow<RecipesPackage>
         get() = _flowData
-    private val _flowData: MutableStateFlow<RecipesPackage> = MutableStateFlow(RecipesPackage(isLoading = true))
+    private val _flowData: MutableStateFlow<RecipesPackage> =
+        MutableStateFlow(RecipesPackage(isLoading = true))
 
     private fun tickerFlow(period: Duration, initialDelay: Duration = Duration.ZERO) = flow {
         delay(initialDelay)
@@ -37,7 +42,13 @@ class RecipesRepository @Inject constructor(
     }
 
     init {
-        tickerFlow(10.seconds, 1.seconds).onEach {
+        CoroutineScope(ioDispatcher).launch {
+            val dbRecipes = dao.getAll()
+            _flowData.value = _flowData.value.copy(
+                recipes = dbRecipes.map { it.toRecipe() }
+            )
+        }
+        tickerFlow(1.minutes, 5.seconds).onEach {
             refresh()
         }.launchIn(CoroutineScope(ioDispatcher))
     }
@@ -47,21 +58,40 @@ class RecipesRepository @Inject constructor(
             _flowData.value = _flowData.value.copy(
                 isLoading = true
             )
-            var value: List<Recipe>
+            var lastState = _flowData.value
             var error = false
             var message: String? = null
             try {
-                value = api.getList().map {
+                val value = api.getList().map {
                     Recipe(it.calorie, it.time, it.name, it.ingredients, it.difficulty)
                 }
-
+                val dbRecipes = value.map {
+                    with(it) {
+                        DbRecipe(
+                            0,
+                            calorie,
+                            time,
+                            name,
+                            ingredients,
+                            difficulty
+                        )
+                    }
+                }
+                dao.nukeTable()
+                dao.insertAll(*dbRecipes.toTypedArray())
+                lastState = lastState.copy(
+                    recipes = value
+                )
             } catch (e: Exception) {
-                value = listOf()
                 error = true
                 message = e.message
             }
 
-            _flowData.value =  RecipesPackage(value, error, message, false)
+            _flowData.value = lastState.copy(
+                isError = error,
+                errorMessage = message,
+                isLoading = false
+            )
         }
     }
 }

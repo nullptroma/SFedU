@@ -4,26 +4,27 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.WindowInsets
 import android.view.WindowInsetsAnimation
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.setPadding
+import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import ru.freedominc.sfedu.data.UsersRepository
 import ru.freedominc.sfedu.databinding.ActivityLoginBinding
+import ru.freedominc.sfedu.domain.User
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
+    @Inject
+    lateinit var userRepository: UsersRepository
+
     private lateinit var binding: ActivityLoginBinding
-    private val emails = listOf(
-        "roman@mail.ru",
-        "pytkov@sfedu.ru",
-        "roman@yandex.ru",
-        "roman@gmail.com",
-        "roman@sfedu.ru"
-    )
-    private val passwords = listOf("1", "2", "3", "4", "5")
+    private val users = mutableListOf<User>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +32,9 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        lifecycleScope.launch {
+            users.addAll(userRepository.getUsers())
+        }
 
         if (Build.VERSION.SDK_INT >= 30) {
             binding.root.setWindowInsetsAnimationCallback(object :
@@ -81,14 +85,12 @@ class LoginActivity : AppCompatActivity() {
     private fun checkLogin(): Boolean {
         val email = binding.editTextEmail.text.toString()
         val password = binding.editTextPassword.text.toString()
-        for (i in 0 until minOf(emails.count(), passwords.count())) {
-            if (emails[i] == email && passwords[i] == password) {
-                return true
-            }
-        }
 
-        binding.buttonLogin.setBackgroundColor(Color.RED)
-        return false
+        val userExists = users.any { it.email == email && it.password == password }
+
+        if(!userExists)
+            binding.buttonLogin.setBackgroundColor(Color.RED)
+        return userExists
     }
 
 }
