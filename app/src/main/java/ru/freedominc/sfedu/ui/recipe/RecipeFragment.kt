@@ -12,7 +12,8 @@ import androidx.lifecycle.ViewModelProvider
 import dagger.hilt.android.AndroidEntryPoint
 import ru.freedominc.sfedu.R
 import ru.freedominc.sfedu.databinding.FragmentRecipeBinding
-import ru.freedominc.sfedu.di.RecipeArgs
+import ru.freedominc.sfedu.di.CurrentRecipe
+import ru.freedominc.sfedu.domain.Recipe
 import ru.freedominc.sfedu.navigation.NavigationHelper
 import javax.inject.Inject
 
@@ -20,9 +21,9 @@ import javax.inject.Inject
 class RecipeFragment : Fragment() {
 
     @Inject
-    @RecipeArgs
+    @CurrentRecipe
     @JvmField
-    var args: Bundle? = null
+    var currentRecipe: Recipe? = null
 
     private var _binding: FragmentRecipeBinding? = null
 
@@ -41,12 +42,21 @@ class RecipeFragment : Fragment() {
         _binding = FragmentRecipeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val recipe = args?.getString("recipe")
+        val recipe = currentRecipe
         if(recipe == null) {
-            binding.textRecipe.text = resources.getString(R.string.no_recipe)
+            binding.tvRecipeNotSelected.visibility = View.VISIBLE
+            binding.recipeInfo.visibility = View.GONE
         }
         else {
-            binding.textRecipe.text = resources.getString(R.string.recipe, recipe)
+            binding.tvRecipeNotSelected.visibility = View.GONE
+            binding.recipeInfo.visibility = View.VISIBLE
+            with(binding) {
+                tvRecipeName.text = recipe.name
+                tvRecipeCalorie.text = getString(R.string.calorie, recipe.calorie)
+                tvRecipeTime.text = getString(R.string.coock_time, recipe.time)
+                tvRecipeIngredients.text = getString(R.string.ingredients, recipe.ingredients)
+                tvRecipeDifficulty.text = getString(R.string.difficulty, recipe.difficulty)
+            }
         }
         return root
     }

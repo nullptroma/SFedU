@@ -63,10 +63,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupNavHelper() {
-        navHelper.onRecipeSelect = { name ->
-            val newArgs = Bundle()
-            newArgs.putString("recipe", name)
-            navHelper.currentRecipeArgs = newArgs
+        navHelper.onRecipeSelect = { recipe ->
+            navHelper.currentRecipe = recipe
 
             val navController = findNavController(R.id.nav_host_fragment_content_main)
             val navView = binding.navView

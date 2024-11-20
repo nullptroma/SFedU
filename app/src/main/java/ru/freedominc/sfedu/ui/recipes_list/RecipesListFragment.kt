@@ -47,7 +47,7 @@ class RecipesListFragment : Fragment() {
         val root: View = binding.root
 
         val customAdapter = RecipesAdapter(resources.displayMetrics.heightPixels) { recipe ->
-            navigationHelper.onRecipeSelect(recipe.name)
+            navigationHelper.onRecipeSelect(recipe)
         }
         val recyclerView: RecyclerView = binding.recyclerViewRecipes
         recyclerView.layoutManager = GridLayoutManager(this.context, 2)

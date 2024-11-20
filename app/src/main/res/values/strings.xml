@@ -18,4 +18,9 @@
     <string name="menu_recipe">Current recipe</string>
     <string name="menu_favorites">Favorites</string>
     <string name="login_horizontal">Login (Horizontal)</string>
+
+    <string name="calorie">Калорийность: %1$d</string>
+    <string name="coock_time">Время приготовления: %1$d</string>
+    <string name="ingredients">Ингредиенты: %1$s</string>
+    <string name="difficulty">Уровень сложности: %1$d</string>
 </resources>

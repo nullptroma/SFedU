@@ -7,7 +7,7 @@
     tools:context=".ui.recipe.RecipeFragment">
 
     <TextView
-        android:id="@+id/text_recipe"
+        android:id="@+id/tv_recipe_not_selected"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -15,8 +15,55 @@
         android:layout_marginEnd="8dp"
         android:textAlignment="center"
         android:textSize="20sp"
+        android:text="@string/no_recipe"
+        tools:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:id="@+id/recipe_info"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv_recipe_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Название"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:textSize="48sp"/>
+        <TextView
+            android:layout_marginTop="16dp"
+            android:id="@+id/tv_recipe_calorie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Калорийность: "
+            android:textSize="24sp"/>
+        <TextView
+            android:layout_marginTop="16dp"
+            android:id="@+id/tv_recipe_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Время приготовления: "
+            android:textSize="24sp"/>
+        <TextView
+            android:layout_marginTop="16dp"
+            android:id="@+id/tv_recipe_ingredients"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Ингредиенты: "
+            android:textSize="24sp"/>
+        <TextView
+            android:layout_marginTop="16dp"
+            android:id="@+id/tv_recipe_difficulty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Уровень сложности: "
+            android:textSize="24sp"/>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

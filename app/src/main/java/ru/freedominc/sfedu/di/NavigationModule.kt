@@ -10,13 +10,14 @@ import dagger.hilt.android.scopes.ActivityRetainedScoped
 import dagger.hilt.android.scopes.ActivityScoped
 import dagger.hilt.android.scopes.FragmentScoped
 import dagger.hilt.components.SingletonComponent
+import ru.freedominc.sfedu.domain.Recipe
 import ru.freedominc.sfedu.navigation.NavigationHelper
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class RecipeArgs
+annotation class CurrentRecipe
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
@@ -33,9 +34,9 @@ class NavigationModule {
     }
 
     @Provides
-    @RecipeArgs
-    fun provideRecipeArgs(navigationHelper: NavigationHelper) : Bundle? {
-        return navigationHelper.currentRecipeArgs
+    @CurrentRecipe
+    fun provideRecipeArgs(navigationHelper: NavigationHelper) : Recipe? {
+        return navigationHelper.currentRecipe
     }
 }
 

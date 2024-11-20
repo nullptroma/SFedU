@@ -1,9 +1,9 @@
 package ru.freedominc.sfedu.navigation
 
-import android.os.Bundle
+import ru.freedominc.sfedu.domain.Recipe
 
 class NavigationHelper {
-    var onRecipeSelect : (String)-> Unit = { }
+    var onRecipeSelect : (Recipe)-> Unit = { }
 
-    var currentRecipeArgs : Bundle? = null
+    var currentRecipe: Recipe? = null
 }

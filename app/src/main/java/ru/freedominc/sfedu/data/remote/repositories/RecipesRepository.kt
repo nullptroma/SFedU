@@ -37,7 +37,7 @@ class RecipesRepository @Inject constructor(
     }
 
     init {
-        tickerFlow(10.seconds, 3.seconds).onEach {
+        tickerFlow(10.seconds, 1.seconds).onEach {
             refresh()
         }.launchIn(CoroutineScope(ioDispatcher))
     }
