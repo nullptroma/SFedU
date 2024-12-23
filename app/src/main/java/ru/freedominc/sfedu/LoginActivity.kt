@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.WindowInsets
 import android.view.WindowInsetsAnimation
 import androidx.activity.enableEdgeToEdge
@@ -12,6 +13,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.freedominc.sfedu.data.UsersRepository
 import ru.freedominc.sfedu.databinding.ActivityLoginBinding
@@ -33,7 +35,10 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         lifecycleScope.launch {
-            users.addAll(userRepository.getUsers())
+            while(users.isEmpty()){
+                users.addAll(userRepository.getUsers())
+                delay(250)
+            }
         }
 
         if (Build.VERSION.SDK_INT >= 30) {
