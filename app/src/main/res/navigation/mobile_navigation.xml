@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/nav_recipes_list"
-        android:name="ru.freedominc.sfedu.ui.recipes_list.RecipesListFragment"
+        android:name="ru.freedominc.sfedu.ui.screens.recipes_list.RecipesListFragment"
         android:label="@string/menu_list"
         tools:layout="@layout/fragment_recipes_list" />
 
     <fragment
         android:id="@+id/nav_recipe"
-        android:name="ru.freedominc.sfedu.ui.recipe.RecipeFragment"
+        android:name="ru.freedominc.sfedu.ui.screens.recipe.RecipeFragment"
         android:label="@string/menu_recipe"
         tools:layout="@layout/fragment_recipe" >
         <argument
@@ -23,7 +23,7 @@
 
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="ru.freedominc.sfedu.ui.slideshow.SlideshowFragment"
+        android:name="ru.freedominc.sfedu.ui.screens.favorite_list.FavoritesListFragment"
         android:label="@string/menu_favorites"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/fragment_favorites_list" />
 </navigation>

@@ -1,9 +1,11 @@
 package ru.freedominc.sfedu.data.local.model
 
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import androidx.room.Relation
 
 @Entity(foreignKeys = [ForeignKey(entity = DbUser::class,
     parentColumns = arrayOf("id"),
@@ -21,5 +23,12 @@ data class DbFavoriteRecipe(
 
     @ColumnInfo(name = "recipe_id")
     val recipeId: Int,
-) {
-}
+)
+
+data class DbUserAndRecipe(
+    @Embedded val favorite: DbFavoriteRecipe,
+    @Relation(parentColumn = "user_id", entityColumn = "id")
+    val user: DbUser,
+    @Relation(parentColumn = "recipe_id", entityColumn = "id")
+    val recipe: DbRecipe
+)

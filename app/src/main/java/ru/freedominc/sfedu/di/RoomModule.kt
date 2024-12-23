@@ -10,6 +10,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import ru.freedominc.sfedu.data.local.AppDb
+import ru.freedominc.sfedu.data.local.dao.FavoriteRecipeDao
 import ru.freedominc.sfedu.data.local.dao.RecipeDao
 import ru.freedominc.sfedu.data.local.dao.UserDao
 import ru.freedominc.sfedu.data.local.model.DbUser
@@ -29,6 +30,11 @@ class RoomModule {
     @Provides
     fun provideRecipeDao(database: AppDb): RecipeDao {
         return database.recipeDao
+    }
+
+    @Provides
+    fun provideFavoriteDao(database: AppDb): FavoriteRecipeDao {
+        return database.favoriteDao
     }
 
     @Singleton

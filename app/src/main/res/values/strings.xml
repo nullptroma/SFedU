@@ -19,8 +19,15 @@
     <string name="menu_favorites">Favorites</string>
     <string name="login_horizontal">Login (Horizontal)</string>
 
-    <string name="calorie">Калорийность: %1$d</string>
-    <string name="coock_time">Время приготовления: %1$d</string>
-    <string name="ingredients">Ингредиенты: %1$s</string>
-    <string name="difficulty">Уровень сложности: %1$d</string>
+    <string name="calorie">Calories: %1$d</string>
+    <string name="coock_time">Cooking time: %1$d</string>
+    <string name="ingredients">Ingredients: %1$s</string>
+    <string name="difficulty">Difficulty level: %1$d</string>
+    <string name="wait_toast">Please wait...</string>
+
+    <string name="cancel">Cancel</string>
+    <string name="add_to_favorites">Add to favorites</string>
+    <string name="remove_from_favorites">Remove from favorites</string>
+    <string name="now_is_favorite">Recipe \"%1$s\" is on the list of favorites</string>
+    <string name="now_is_not_favorite">Recipe \"%1$s\" is not on the list of favorites</string>
 </resources>

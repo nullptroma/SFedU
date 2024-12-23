@@ -1,23 +1,16 @@
-package ru.freedominc.sfedu.ui.recipes_list.recycler_view
+package ru.freedominc.sfedu.ui.screens.recipes_list
 
-import android.content.Context
-import android.graphics.Point
-import android.util.DisplayMetrics
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.freedominc.sfedu.databinding.ItemRecipeBinding
 import ru.freedominc.sfedu.domain.Recipe
-import kotlin.math.log
 import kotlin.math.max
 
 
-class RecipesAdapter(private val screenHeight: Int, private val onClick: (Recipe) -> Unit) :
+class RecipesAdapter(private val screenHeight: Int, private val onClick: (Recipe) -> Unit, private val onLongTap: (Recipe)->Unit) :
     RecyclerView.Adapter<RecipesAdapter.ViewHolder>() {
     val list = AsyncListDiffer(this, object : DiffUtil.ItemCallback<Recipe>() {
         override fun areItemsTheSame(
@@ -34,11 +27,15 @@ class RecipesAdapter(private val screenHeight: Int, private val onClick: (Recipe
     })
 
     class ViewHolder(private val binding: ItemRecipeBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(recipe: Recipe, onClick: (Recipe) -> Unit) {
+        fun bind(recipe: Recipe, onClick: (Recipe) -> Unit, onLongTap: (Recipe)->Unit) {
             with(binding) {
                 tvRecipeText.text = recipe.name
                 cardRecipeItem.setOnClickListener {
                     onClick(recipe)
+                }
+                cardRecipeItem.setOnLongClickListener {
+                    onLongTap(recipe)
+                    return@setOnLongClickListener true
                 }
             }
         }
@@ -53,7 +50,7 @@ class RecipesAdapter(private val screenHeight: Int, private val onClick: (Recipe
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.bind(list.currentList[position], onClick)
+        viewHolder.bind(list.currentList[position], onClick, onLongTap)
     }
 
     // Return the size of your dataset (invoked by the layout manager)

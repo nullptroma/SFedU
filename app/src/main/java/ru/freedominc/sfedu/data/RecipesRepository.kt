@@ -14,8 +14,8 @@ import ru.freedominc.sfedu.data.local.dao.RecipeDao
 import ru.freedominc.sfedu.data.local.model.DbRecipe
 import ru.freedominc.sfedu.data.remote.api.RecipesApi
 import ru.freedominc.sfedu.di.IoDispatcher
+import ru.freedominc.sfedu.domain.DataPackage
 import ru.freedominc.sfedu.domain.Recipe
-import ru.freedominc.sfedu.domain.RecipesPackage
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.time.Duration
@@ -28,10 +28,10 @@ class RecipesRepository @Inject constructor(
     private val dao: RecipeDao,
     @IoDispatcher ioDispatcher: CoroutineDispatcher
 ) {
-    val flowData: StateFlow<RecipesPackage>
-        get() = _flowData
-    private val _flowData: MutableStateFlow<RecipesPackage> =
-        MutableStateFlow(RecipesPackage(isLoading = true))
+    val recipes: StateFlow<DataPackage<Recipe>>
+        get() = _recipes
+    private val _recipes: MutableStateFlow<DataPackage<Recipe>> =
+        MutableStateFlow(DataPackage(isLoading = true))
 
     private fun tickerFlow(period: Duration, initialDelay: Duration = Duration.ZERO) = flow {
         delay(initialDelay)
@@ -44,8 +44,8 @@ class RecipesRepository @Inject constructor(
     init {
         CoroutineScope(ioDispatcher).launch {
             val dbRecipes = dao.getAll()
-            _flowData.value = _flowData.value.copy(
-                recipes = dbRecipes.map { it.toRecipe() }
+            _recipes.value = _recipes.value.copy(
+                data = dbRecipes.map { it.toRecipe() }
             )
         }
         tickerFlow(1.minutes, 5.seconds).onEach {
@@ -55,20 +55,22 @@ class RecipesRepository @Inject constructor(
 
     private fun refresh() {
         runBlocking {
-            _flowData.value = _flowData.value.copy(
+            _recipes.value = _recipes.value.copy(
                 isLoading = true
             )
-            var lastState = _flowData.value
+            var lastState = _recipes.value
             var error = false
             var message: String? = null
             try {
-                val value = api.getList().map {
+                val remoteRecipes = api.getList().map {
                     Recipe(it.calorie, it.time, it.name, it.ingredients, it.difficulty)
                 }
-                val dbRecipes = value.map {
+                val oldRecipes = dao.getAll().associateBy({ it.name }, { it.id })
+                val dbRecipes = remoteRecipes.map {
                     with(it) {
+                        val id = oldRecipes.getOrDefault(name, 0)
                         DbRecipe(
-                            0,
+                            id,
                             calorie,
                             time,
                             name,
@@ -77,17 +79,16 @@ class RecipesRepository @Inject constructor(
                         )
                     }
                 }
-                dao.nukeTable()
                 dao.insertAll(*dbRecipes.toTypedArray())
                 lastState = lastState.copy(
-                    recipes = value
+                    data = remoteRecipes
                 )
             } catch (e: Exception) {
                 error = true
                 message = e.message
             }
 
-            _flowData.value = lastState.copy(
+            _recipes.value = lastState.copy(
                 isError = error,
                 errorMessage = message,
                 isLoading = false

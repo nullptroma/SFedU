@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.WindowInsets
 import android.view.WindowInsetsAnimation
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -18,28 +19,21 @@ import kotlinx.coroutines.launch
 import ru.freedominc.sfedu.data.UsersRepository
 import ru.freedominc.sfedu.databinding.ActivityLoginBinding
 import ru.freedominc.sfedu.domain.User
+import ru.freedominc.sfedu.domain.UserManager
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
     @Inject
-    lateinit var userRepository: UsersRepository
+    lateinit var userManager: UserManager
 
     private lateinit var binding: ActivityLoginBinding
-    private val users = mutableListOf<User>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        lifecycleScope.launch {
-            while(users.isEmpty()){
-                users.addAll(userRepository.getUsers())
-                delay(250)
-            }
-        }
 
         if (Build.VERSION.SDK_INT >= 30) {
             binding.root.setWindowInsetsAnimationCallback(object :
@@ -88,14 +82,19 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun checkLogin(): Boolean {
+        if(!userManager.isReadyToWork) {
+            Toast.makeText(this, getString(R.string.wait_toast), Toast.LENGTH_SHORT).show()
+            return false
+        }
+
         val email = binding.editTextEmail.text.toString()
         val password = binding.editTextPassword.text.toString()
 
-        val userExists = users.any { it.email == email && it.password == password }
+        val res = userManager.tryLogin(email, password)
 
-        if(!userExists)
+        if(!res)
             binding.buttonLogin.setBackgroundColor(Color.RED)
-        return userExists
+        return res
     }
 
 }

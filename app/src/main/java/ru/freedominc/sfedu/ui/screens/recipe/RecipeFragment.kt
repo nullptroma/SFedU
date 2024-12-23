@@ -1,4 +1,4 @@
-package ru.freedominc.sfedu.ui.recipe
+package ru.freedominc.sfedu.ui.screens.recipe
 
 import android.os.Bundle
 import android.util.Log
